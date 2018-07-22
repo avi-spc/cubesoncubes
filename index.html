@@ -11,21 +11,56 @@
             var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
             var renderer = new THREE.WebGLRenderer();
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.body.appendChild( renderer.domElement );
             
-            var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-            var material = new THREE.MeshBasicMaterial( { color: 0x17A589, wireframe: false } );
-            var cube = new THREE.Mesh( geometry, material );
-            scene.add( cube );
+            window.addEventListener( 'resize', function() {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize( width, height );
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix();
+            } );
+
+            var dl = new THREE.DirectionalLight( 0xffffff, 3 );
+            dl.position.set( 15, 50, 70 );
+            dl.castShadow = true;
+            dl.shadow.mapSize.width = 512;  // default
+            dl.shadow.mapSize.height = 512; // default
+            dl.shadow.camera.near = 0.5;    // default
+            dl.shadow.camera.far = 500;
+            scene.add(dl);
+
+            var geometry1 = new THREE.BoxGeometry( 1, 1, 1 );
+            var material1 = new THREE.MeshPhongMaterial( { color: 0x17A589, wireframe: false } );
+            var cube1 = new THREE.Mesh( geometry1, material1 );
+            //cube.position.set( 0, -0.8, -.80 );
+            scene.add( cube1 );
+            var geometry2 = new THREE.BoxGeometry( 0.7, 0.7, 0.7 );
+            var material2 = new THREE.MeshPhongMaterial( { color: 0xFF5733, wireframe: false } );
+            var cube2 = new THREE.Mesh( geometry2, material2 );
+            cube2.position.set( 1.185,-0.1,0 );
+            scene.add( cube2 );
 
             camera.position.z = 3;
+            
+            cube1.rotation.x = Math.PI/6;
+            cube1.rotation.y = Math.PI/4;
+            cube2.rotation.x = Math.PI/6;
+            cube2.rotation.y = Math.PI/4;
 
-            cube.rotation.x = Math.PI/6;
-            cube.rotation.y = Math.PI/4;
+            var planeGeometry = new THREE.PlaneGeometry( 5,5,5 );
+            var planeMat = new THREE.MeshPhongMaterial( { color: 0x1B2631 } );
+            var plane = new THREE.Mesh( planeGeometry, planeMat );
+            plane.position.set(0,-0.5,0)
+            //scene.add( plane );
+
+            plane.rotation.x = -Math.PI/5; 
 
             var update = function() {
-                
+                //cube.rotation.y += 0.01;
             };
 
             var render = function() {
