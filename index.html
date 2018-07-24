@@ -12,8 +12,6 @@
             scene.background = new THREE.Color( 0x1B2631 );
 
             var renderer = new THREE.WebGLRenderer();
-            //renderer.shadowMap.enabled = false;
-            //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.body.appendChild( renderer.domElement );
             
@@ -25,192 +23,134 @@
                 camera.updateProjectionMatrix();
             } );
 
+            camera.position.z = 3;
+
             var dl = new THREE.DirectionalLight( 0xffffff, 3 );
             dl.position.set( 15, 50, 70 );
             dl.castShadow = false;
             scene.add(dl);
+
+            var baseGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+            var baseMaterial = new THREE.MeshPhongMaterial( { color: 0x581845, wireframe: false } );
+            var baseShape = new THREE.Mesh( baseGeometry, baseMaterial );
+            baseShape.position.set( 0, -0.8, 0 );
+            baseShape.rotation.x = Math.PI/8;
+            baseShape.rotation.y = Math.PI/4;
+            scene.add( baseShape );
             
-            var geometry = new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3( 2.5, 1.5, 0) );
-            geometry.vertices.push(new THREE.Vector3( -2.5, 1.5, 0) );
-            geometry.vertices.push(new THREE.Vector3( -2.5, -2.6, 0) );
-            geometry.vertices.push(new THREE.Vector3( 2.5, -2.6, 0) );
-            geometry.vertices.push(new THREE.Vector3( 2.5,  1.5, 0) );
+            var meshGeometry = [];
+            var meshMaterial = [];
+            var meshShape = [];
+            var shapeSize = [ 0.7, 0.4, 0.2 ];
+            var meshColor = [ 0x900c3f, 0xc70039, 0xff5733 ];
+            var setPositionY = [ -0.8, -0.8, -0.8, -0.98, -1.1, -1.2, -0.98, -1.1, -1.2 ];
+
+            for( i=0; i<9; i++ ) {
+                meshGeometry[i] = new THREE.BoxGeometry( shapeSize[i%3], shapeSize[i%3], shapeSize[i%3] );
+                meshMaterial[i] = new THREE.MeshPhongMaterial( { color: meshColor[i%3], wireframe: false } );
+                meshShape[i] = new THREE.Mesh( meshGeometry[i], meshMaterial[i] );
+                if( i < 3 ){
+                    meshShape[i].position.set(0, setPositionY[i], -0.3);
+                }
+                else if( i >= 3 ){
+                    meshShape[i].position.set(0, setPositionY[i], 0);
+                }
+                
+                meshShape[i].rotation.x = Math.PI/8;
+                meshShape[i].rotation.y = Math.PI/4;
+                scene.add( meshShape[i] );
+            }           
+
+            var lineGeometry = new THREE.Geometry();
+            lineGeometry.vertices.push(new THREE.Vector3( 2.5, 1.5, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( -2.5, 1.5, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( -2.5, -2.6, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( 2.5, -2.6, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( 2.5,  1.5, 0) );
             var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
-            var line = new THREE.Line( geometry, material );
+            var line = new THREE.Line( lineGeometry, material );
             scene.add( line );
 
-            var geometry1 = new THREE.BoxGeometry( 1, 1, 1 );
-            var material1 = new THREE.MeshPhongMaterial( { color: 0x581845, wireframe: false } );
-            var cube1 = new THREE.Mesh( geometry1, material1 );
-            cube1.position.set( 0, -0.8, 0 );
-            scene.add( cube1 );
-            
-            //top stack
-
-            var geometry2 = new THREE.BoxGeometry( 0.7, 0.7, 0.7 );
-            var material2 = new THREE.MeshPhongMaterial( { color: 0x900c3f, wireframe: false } );
-            var cube2 = new THREE.Mesh( geometry2, material2 );
-            cube2.position.set( 0, -0.8, -0.1 );
-            scene.add( cube2 );
-
-
-            var geometry3 = new THREE.BoxGeometry( 0.4, 0.4, 0.4 );
-            var material3 = new THREE.MeshPhongMaterial( { color: 0xc70039, wireframe: false } );
-            var cube3 = new THREE.Mesh( geometry3, material3 );
-            cube3.position.set( 0, -0.8, -0.3 );
-            scene.add( cube3 );
-
-            var geometry4 = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-            var material4 = new THREE.MeshPhongMaterial( { color: 0xff5733, wireframe: false } );
-            var cube4 = new THREE.Mesh( geometry4, material4 );
-            cube4.position.set( 0, -0.8, -0.3 );
-            scene.add( cube4 );
-
-            //right stack
-
-            var geometry5 = new THREE.BoxGeometry( 0.7, 0.7, 0.7 );
-            var material5 = new THREE.MeshPhongMaterial( { color: 0x900c3f, wireframe: false } );
-            var cube5 = new THREE.Mesh( geometry5, material5 );
-            cube5.position.set( 0, -0.98, 0 );
-            scene.add( cube5 );
-
-            var geometry6 = new THREE.BoxGeometry( 0.4, 0.4, 0.4 );
-            var material6 = new THREE.MeshPhongMaterial( { color: 0xc70039, wireframe: false } );
-            var cube6 = new THREE.Mesh( geometry6, material6 );
-            cube6.position.set( 0, -1.1, 0 );
-            scene.add( cube6 );
-
-            var geometry7 = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-            var material7 = new THREE.MeshPhongMaterial( { color: 0xff5733, wireframe: false } );
-            var cube7 = new THREE.Mesh( geometry7, material7 );
-            cube7.position.set( 0, -1.2, 0 );
-            scene.add( cube7 );
-
-            //left stack
-
-            var geometry8 = new THREE.BoxGeometry( 0.7, 0.7, 0.7 );
-            var material8 = new THREE.MeshPhongMaterial( { color: 0x900c3f, wireframe: false } );
-            var cube8 = new THREE.Mesh( geometry8, material8 );
-            cube8.position.set( 0, -0.98, 0 );
-            scene.add( cube8 );
-
-            var geometry9 = new THREE.BoxGeometry( 0.4, 0.4, 0.4 );
-            var material9 = new THREE.MeshPhongMaterial( { color: 0xc70039, wireframe: false } );
-            var cube9 = new THREE.Mesh( geometry9, material9 );
-            cube9.position.set( 0, -1.1, 0 );
-            scene.add( cube9 );
-
-            var geometry10 = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-            var material10 = new THREE.MeshPhongMaterial( { color: 0xff5733, wireframe: false } );
-            var cube10 = new THREE.Mesh( geometry10, material10 );
-            cube10.position.set( 0, -1.2, 0 );
-            scene.add( cube10 );
-           
-            camera.position.z = 3;
-            
-            cube1.rotation.x = Math.PI/8;
-            cube1.rotation.y = Math.PI/4;
-            cube2.rotation.x = Math.PI/8;
-            cube2.rotation.y = Math.PI/4;
-            cube3.rotation.x = Math.PI/8;
-            cube3.rotation.y = Math.PI/4;
-            cube4.rotation.x = Math.PI/8;
-            cube4.rotation.y = Math.PI/4;
-            cube5.rotation.x = Math.PI/8;
-            cube5.rotation.y = Math.PI/4;
-            cube6.rotation.x = Math.PI/8;
-            cube6.rotation.y = Math.PI/4;
-            cube7.rotation.x = Math.PI/8;
-            cube7.rotation.y = Math.PI/4;
-            cube8.rotation.x = Math.PI/8;
-            cube8.rotation.y = Math.PI/4;
-            cube9.rotation.x = Math.PI/8;
-            cube9.rotation.y = Math.PI/4;
-            cube10.rotation.x = Math.PI/8;
-            cube10.rotation.y = Math.PI/4;
-
-            var starter = 0;            
+            var changeColorTimer = 0;            
 
             var update = function() {                
-                if(cube2.position.y<=-0.1){
-                    cube2.position.y +=0.01;
+                if(meshShape[0].position.y<=-0.1){
+                    meshShape[0].position.y +=0.01;
                 }
 
-                if(cube2.position.z<=0.3){
-                    cube2.position.z +=0.01;
+                if(meshShape[0].position.z<=0.3){
+                    meshShape[0].position.z +=0.01;
                 }
 
-                if(cube3.position.y<=0.4){
-                    cube3.position.y +=0.01;
+                if(meshShape[1].position.y<=0.4){
+                    meshShape[1].position.y +=0.01;
                 }
 
-                if(cube3.position.z<=0.6){
-                    cube3.position.z +=0.01;
+                if(meshShape[1].position.z<=0.6){
+                    meshShape[1].position.z +=0.01;
                 }
 
-                if(cube4.position.y<=0.65){
-                    cube4.position.y +=0.01;
+                if(meshShape[2].position.y<=0.65){
+                    meshShape[2].position.y +=0.01;
                 }
 
-                if(cube4.position.z<=0.75){
-                    cube4.position.z +=0.01;
+                if(meshShape[2].position.z<=0.75){
+                    meshShape[2].position.z +=0.01;
                 }
 
-                else if (cube4.position.z>=0.75){
-                    starter += 0.1;
-                    if(starter>=5)
-                        cube1.material = new THREE.MeshPhongMaterial( { color: 0x13a4ad, wireframe: false } );
+                else if (meshShape[2].position.z>=0.75){
+                    changeColorTimer += 0.1;
+                    if(changeColorTimer>=5)
+                        baseShape.material = new THREE.MeshPhongMaterial( { color: 0x13a4ad, wireframe: false } );
                 }
 
-                if(cube5.position.x<=0.5){
-                    cube5.position.x +=0.01;
+                if(meshShape[3].position.x<=0.5){
+                    meshShape[3].position.x +=0.01;
                 }
 
-                if(cube5.position.z<=0.5){
-                    cube5.position.z +=0.01;
+                if(meshShape[3].position.z<=0.5){
+                    meshShape[3].position.z +=0.01;
                 }
 
-                if(cube6.position.x<=0.8){
-                    cube6.position.x +=0.01;
+                if(meshShape[4].position.x<=0.8){
+                    meshShape[4].position.x +=0.01;
                 }
 
-                if(cube6.position.z<=0.8){
-                    cube6.position.z +=0.01;
+                if(meshShape[4].position.z<=0.8){
+                    meshShape[4].position.z +=0.01;
                 }
 
-                if(cube7.position.x<=1){
-                    cube7.position.x +=0.01;
+                if(meshShape[5].position.x<=1){
+                    meshShape[5].position.x +=0.01;
                 }
 
-                if(cube7.position.z<=1){
-                    cube7.position.z +=0.01;
+                if(meshShape[5].position.z<=1){
+                    meshShape[5].position.z +=0.01;
                 }
 
-                if(cube8.position.x>=-0.5){
-                    cube8.position.x -=0.01;
+                if(meshShape[6].position.x>=-0.5){
+                    meshShape[6].position.x -=0.01;
                 }
 
-                if(cube8.position.z<=0.5){
-                    cube8.position.z +=0.01;
+                if(meshShape[6].position.z<=0.5){
+                    meshShape[6].position.z +=0.01;
                 }
 
-                if(cube9.position.x>=-0.8){
-                    cube9.position.x -=0.01;
+                if(meshShape[7].position.x>=-0.8){
+                    meshShape[7].position.x -=0.01;
                 }
 
-                if(cube9.position.z<=0.8){
-                    cube9.position.z +=0.01;
+                if(meshShape[7].position.z<=0.8){
+                    meshShape[7].position.z +=0.01;
                 }
 
-                if(cube10.position.x>=-1){
-                    cube10.position.x -=0.01;
+                if(meshShape[8].position.x>=-1){
+                    meshShape[8].position.x -=0.01;
                 }
 
-                if(cube10.position.z<=1){
-                    cube10.position.z +=0.01;
+                if(meshShape[8].position.z<=1){
+                    meshShape[8].position.z +=0.01;
                 }
-
 
             };
 
@@ -225,10 +165,7 @@
             };
 
             AnimationLoop();
-            if( starter === false ){
-                
-            }
-
+            
         </script>
     </body>
 </html>
