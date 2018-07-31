@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CubesOnCubes</title>
+        <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    <body>
+        <script src="js/three.js"></script>
+        <script>
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            scene.background = new THREE.Color( 0x1B2631 );
+
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+            
+            window.addEventListener( 'resize', function() {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                renderer.setSize( width, height );
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix();
+            } );
+
+            camera.position.z = 3;
+
+            var dl = new THREE.DirectionalLight( 0xffffff, 3 );
+            dl.position.set( 15, 50, 70 );
+            dl.castShadow = false;
+            scene.add(dl);
+
+            var baseGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+            var baseMaterial = new THREE.MeshPhongMaterial( { color: 0x581845, wireframe: false } );
+            var baseShape = new THREE.Mesh( baseGeometry, baseMaterial );
+            baseShape.position.set( 0, -0.8, 0 );
+            baseShape.rotation.x = Math.PI/8;
+            baseShape.rotation.y = Math.PI/4;
+            scene.add( baseShape );
+            
+            var meshGeometry = [];
+            var meshMaterial = [];
+            var meshShape = [];
+            var shapeSize = [ 0.7, 0.4, 0.2 ];
+            var meshColor = [ 0x900c3f, 0xc70039, 0xff5733 ];
+            var setPositionY = [ -0.8, -0.8, -0.8, -0.98, -1.1, -1.2, -0.98, -1.1, -1.2 ];
+
+            for( i=0; i<9; i++ ) {
+                meshGeometry[i] = new THREE.BoxGeometry( shapeSize[i%3], shapeSize[i%3], shapeSize[i%3] );
+                meshMaterial[i] = new THREE.MeshPhongMaterial( { color: meshColor[i%3], wireframe: false } );
+                meshShape[i] = new THREE.Mesh( meshGeometry[i], meshMaterial[i] );
+                if( i < 3 ){
+                    meshShape[i].position.set(0, setPositionY[i], -0.3);
+                }
+                else if( i >= 3 ){
+                    meshShape[i].position.set(0, setPositionY[i], 0);
+                }
+                
+                meshShape[i].rotation.x = Math.PI/8;
+                meshShape[i].rotation.y = Math.PI/4;
+                scene.add( meshShape[i] );
+            }           
+
+            var lineGeometry = new THREE.Geometry();
+            lineGeometry.vertices.push(new THREE.Vector3( 2.5, 1.5, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( -2.5, 1.5, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( -2.5, -2.6, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( 2.5, -2.6, 0) );
+            lineGeometry.vertices.push(new THREE.Vector3( 2.5,  1.5, 0) );
+            var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
+            var line = new THREE.Line( lineGeometry, material );
+            scene.add( line );
+
+            var changeColorTimer = 0;            
+
+            var update = function() {                
+                if(meshShape[0].position.y<=-0.1){
+                    meshShape[0].position.y +=0.01;
+                }
+
+                if(meshShape[0].position.z<=0.3){
+                    meshShape[0].position.z +=0.01;
+                }
+
+                if(meshShape[1].position.y<=0.4){
+                    meshShape[1].position.y +=0.01;
+                }
+
+                if(meshShape[1].position.z<=0.6){
+                    meshShape[1].position.z +=0.01;
+                }
+
+                if(meshShape[2].position.y<=0.65){
+                    meshShape[2].position.y +=0.01;
+                }
+
+                if(meshShape[2].position.z<=0.75){
+                    meshShape[2].position.z +=0.01;
+                }
+
+                else if (meshShape[2].position.z>=0.75){
+                    changeColorTimer += 0.1;
+                    if(changeColorTimer>=5)
+                        baseShape.material = new THREE.MeshPhongMaterial( { color: 0x13a4ad, wireframe: false } );
+                }
+
+                if(meshShape[3].position.x<=0.5){
+                    meshShape[3].position.x +=0.01;
+                }
+
+                if(meshShape[3].position.z<=0.5){
+                    meshShape[3].position.z +=0.01;
+                }
+
+                if(meshShape[4].position.x<=0.8){
+                    meshShape[4].position.x +=0.01;
+                }
+
+                if(meshShape[4].position.z<=0.8){
+                    meshShape[4].position.z +=0.01;
+                }
+
+                if(meshShape[5].position.x<=1){
+                    meshShape[5].position.x +=0.01;
+                }
+
+                if(meshShape[5].position.z<=1){
+                    meshShape[5].position.z +=0.01;
+                }
+
+                if(meshShape[6].position.x>=-0.5){
+                    meshShape[6].position.x -=0.01;
+                }
+
+                if(meshShape[6].position.z<=0.5){
+                    meshShape[6].position.z +=0.01;
+                }
+
+                if(meshShape[7].position.x>=-0.8){
+                    meshShape[7].position.x -=0.01;
+                }
+
+                if(meshShape[7].position.z<=0.8){
+                    meshShape[7].position.z +=0.01;
+                }
+
+                if(meshShape[8].position.x>=-1){
+                    meshShape[8].position.x -=0.01;
+                }
+
+                if(meshShape[8].position.z<=1){
+                    meshShape[8].position.z +=0.01;
+                }
+
+            };
+
+            var render = function() {
+                renderer.render( scene, camera );
+            };
+
+            var AnimationLoop = function() {
+                requestAnimationFrame(AnimationLoop);
+                update();
+                render();
+            };
+
+            AnimationLoop();
+            
+        </script>
+    </body>
+</html>
