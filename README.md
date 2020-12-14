@@ -14,4 +14,5 @@ A simple 3D scene with animated stack of cubes using three.js library.
 * Lights
 
 **Animation**
+
 ![](images/cubes.gif)
