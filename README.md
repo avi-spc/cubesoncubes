@@ -4,7 +4,7 @@
 A simple 3D scene with animated stack of cubes using three.js library.
 
 
-## worked with 
+## Worked with 
 
 * Scene
 * Renderer
@@ -12,3 +12,6 @@ A simple 3D scene with animated stack of cubes using three.js library.
 * Mesh and Line geometries
 * Materials
 * Lights
+
+**Animation**
+![](images/cubes.gif)
